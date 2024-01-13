@@ -1,0 +1,62 @@
+import numpy as np
+import sympy as sp
+from scipy.integrate import odeint
+
+# Define symbols of parameters 
+t, g = sp.symbols('t g')
+m1, m2 = sp.symbols('m1 m2')
+l1, l2 = sp.symbols('l1 l2')
+
+# Force python to consider the angles as functions of something
+
+theta1, theta2 = sp.symbols(r'\theta_1, \theta_2', cls =sp.Function)
+
+theta1 = theta1(t)
+theta2 = theta2(t)
+
+# Define derivatives
+
+theta1_d, theta2_d = sp.diff(theta1, t), sp.diff(theta2, t)
+
+theta1_dd, theta2_dd = sp.diff(theta1_d,t), sp.diff(theta2_d,t)
+
+# Define positions and velocities with using symbols above
+
+x1, y1= l1*sp.sin(theta1), -l1*sp.cos(theta1)
+
+x1_d, y1_d = sp.diff(x1,t), sp.diff(y1,t)
+
+x2, y2 = l2*sp.sin(theta2) + x1, -l2*sp.cos(theta2) + y1
+
+x2_d, y2_d = sp.diff(x2,t), sp.diff(y2,t)
+
+
+# Kinetic NRJs
+
+T1 = 0.5*m1*(x1_d**2 + y1_d**2)
+T2 = 0.5*m1*(x2_d**2 + y2_d**2)
+T = T1 + T2 
+
+# Potential NJRs
+
+V1 = m1*g*y1
+V2 = m2*g*y2
+V = V1 + V2
+
+# Lagrangian and ELs
+
+L = T - V
+
+LHS1 = sp.diff(L.diff(theta1_d), t)
+RHS1 = sp.diff(L, theta1)
+EL1 = LHS1 - RHS1
+
+LHS2 = sp.diff(L.diff(theta2_d), t)
+RHS2 = sp.diff(L, theta2)
+EL2 = LHS2 - RHS2
+
+# print the ELs equations
+
+display(EL1.simplify())
+display(EL2.simplify())
+
