@@ -56,7 +56,12 @@ RHS2 = sp.diff(L, theta2)
 EL2 = LHS2 - RHS2
 
 # print the ELs equations
-
 display(EL1.simplify())
 display(EL2.simplify())
 
+# print theta_dds
+solutions = sp.solve([EL1, EL2], (theta1_dd, theta2_dd))
+solutions[theta1_dd]
+solutions[theta2_dd]
+
+# i think there is an error in my ELs because it seems to be not the correct equations, to check
